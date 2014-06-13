@@ -7,6 +7,7 @@ Install the module with: `npm install closure-belt`
 
 ```javascript
 var closureBelt = require('closure-belt');
+closureBelt.analyzeFile filepath, options
 ```
 
 ## Documentation
