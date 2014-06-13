@@ -1,4 +1,4 @@
-# Closure Belt [![Build Status](https://secure.travis-ci.org/gobie/closure-belt.png?branch=master)](http://travis-ci.org/gobie/closure-belt)
+# Closure Belt [![Build Status](https://secure.travis-ci.org/Gobie/closure-belt.png?branch=master)](http://travis-ci.org/Gobie/closure-belt)
 
 Closure utility belt.
 
