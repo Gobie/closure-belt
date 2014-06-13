@@ -1,0 +1,42 @@
+{
+  "name": "closure-belt",
+  "version": "0.1.0",
+  "main": "lib/closure.coffee",
+  "description": "Closure utility belt.",
+  "homepage": "https://github.com/gobie/closure-belt",
+  "bugs": "https://github.com/gobie/closure-belt/issues",
+  "author": {
+    "name": "Michal Brašna",
+    "email": "michal.brasna@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gobie/closure-belt"
+  },
+  "license": "MIT",
+  "files": [
+    "lib"
+  ],
+  "keywords": [],
+  "devDependencies": {
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-coffeelint": "~0.0.6",
+    "grunt-mocha-test": "~0.10.2",
+    "load-grunt-tasks": "~0.4.0",
+    "time-grunt": "~0.3.1",
+    "chai": "~1.9.1"
+  },
+  "scripts": {
+    "test": "grunt",
+    "start": "coffee server.coffee"
+  },
+  "dependencies": {
+    "coffee-script": "~1.7.1",
+    "glob": "~4.0.0",
+    "event-stream": "~3.1.5",
+    "cli-color": "~0.3.2",
+    "esprima": "~1.2.2",
+    "lodash-node": "~2.4.1",
+    "coffee-errors": "~0.8.6"
+  }
+}
