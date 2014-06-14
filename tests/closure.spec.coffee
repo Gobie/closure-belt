@@ -97,8 +97,8 @@ describe 'closure tests', ->
         "goog.ui.Zippy": yes
         "goog.userAgent": yes
 
-    stream = closure.analyzeFile filePath
-    stream = closure.findMissingRequires stream
+    analyzer = closure.analyzeFile filePath
+    stream = analyzer.findMissingRequires().stream
     stream.pipe es.map (data, cb) ->
       expect(data).to.eql expectation
       done()
@@ -186,8 +186,8 @@ describe 'closure tests', ->
         "goog.ui.Zippy": yes
         "goog.userAgent": yes
 
-    stream = closure.analyzeFile filePath
-    stream = closure.findUnnecessaryRequires stream
+    analyzer = closure.analyzeFile filePath
+    stream = analyzer.findUnnecessaryRequires().stream
     stream.pipe es.map (data, cb) ->
       expect(data).to.eql expectation
       done()

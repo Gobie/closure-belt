@@ -33,8 +33,8 @@ describe 'closure javascript tests', ->
         "goog.a11y.aria.State.LIVE": yes
         "goog.a11y.aria.State.ATOMIC": yes
 
-    stream = closure.analyzeFile filePath
-    stream = stream.pipe es.map (data, cb) ->
+    analyzer = closure.analyzeFile filePath
+    stream = analyzer.stream.pipe es.map (data, cb) ->
       expect(data).to.eql expectation
       done()
       cb()
