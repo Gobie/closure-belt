@@ -5,7 +5,7 @@ fs = require 'fs'
 es = require 'event-stream'
 _ = require 'lodash-node'
 fixApostrophes = require './pipes/fix-apostrophes'
-manipulatorFactory = require './pipes/manipulator'
+manipulatorFactory = require './manipulator-factory'
 output = require './pipes/output'
 ASTAnalyzer = require './ast-analyzer'
 

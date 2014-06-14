@@ -1,10 +1,10 @@
-js = require '../manipulators/javascript'
-coffee = require '../manipulators/coffeescript'
+javascript = require './manipulators/javascript'
+coffeescript = require './manipulators/coffeescript'
 
 module.exports = (ext) ->
   switch ext
-    when '.js' then manipulator = js
-    when '.coffee' then manipulator = coffee
+    when '.js' then manipulator = javascript
+    when '.coffee' then manipulator = coffeescript
     else throw new Error "Unsupported extension #{ext}"
 
   parseToAST: (options) ->
