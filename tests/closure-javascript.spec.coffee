@@ -3,9 +3,9 @@ es = require 'event-stream'
 fs = require 'fs'
 closure = require '../lib/closure'
 
-describe 'closure tests', ->
+describe 'closure javascript tests', ->
   it 'should analyze file', (done) ->
-    filePath = 'tests/data/a11y/aria/announcer.js'
+    filePath = 'tests/data/test_analyze.js'
     expectation =
       "provides":
         "goog.a11y.aria.Announcer": yes
@@ -41,7 +41,7 @@ describe 'closure tests', ->
       cb()
 
   it 'should find missing requires', (done) ->
-    filePath = 'tests/data/tweak/tweakui.js'
+    filePath = 'tests/data/test_tweakui.js'
     expectation =
       "missing":
         "goog.dom.getDomHelper": yes
@@ -131,7 +131,7 @@ describe 'closure tests', ->
       cb()
 
   it 'should find unnecessary requires', (done) ->
-    filePath = 'tests/data/tweak/tweakui.js'
+    filePath = 'tests/data/test_tweakui.js'
     expectation =
       "unnecessary":
         "goog.dom.DomHelper": yes
@@ -220,7 +220,7 @@ describe 'closure tests', ->
       cb()
 
   it 'should fix apostrophes in goog.(require|provide)', (done) ->
-    inputFilePath = 'tests/data/test.js'
+    inputFilePath = 'tests/data/test_apostrophes.js'
     outputFilePath = 'tests/data/test_apostrophes_fixed.js'
 
     stream = closure.fixApostrophes inputFilePath

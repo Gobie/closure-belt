@@ -2,7 +2,7 @@ _ = require 'lodash-node'
 traverse = require '../utils/traverse'
 esprima = require 'esprima'
 
-class Manipulator
+manipulator =
   parseToAST: (code, options) ->
     options = _.defaults options, tolerant: yes
     esprima.parse code, options
@@ -49,4 +49,4 @@ parseNode = (options, results) ->
       results['namespaces'][key] = if options['loc'] then getLineAndColumn node else yes
       yes
 
-module.exports = new Manipulator
+module.exports = manipulator
