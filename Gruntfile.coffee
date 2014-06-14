@@ -9,11 +9,11 @@ module.exports = (grunt) ->
           reporter: 'spec'
           require: 'coffee-script/register'
           clearRequireCache: yes
-        src: ['tests/**/*.coffee']
+        src: ['tests/*.coffee']
     coffeelint:
       lib: src: ['lib/**/*.coffee']
       server: src: ['server.coffee']
-      tests: src: ['tests/**/*.coffee']
+      tests: src: ['tests/*.coffee']
       options:
         max_line_length:
           value: 120
