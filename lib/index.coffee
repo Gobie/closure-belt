@@ -2,9 +2,8 @@ require 'coffee-errors'
 glob = require 'glob'
 es = require 'event-stream'
 _ = require 'lodash-node'
-fixApostrophes = require './pipes/fix-apostrophes'
+fixApostrophesCommand = require './commands/fix-apostrophes'
 analyzeCommand = require './commands/analyze'
-readFile = require './utils/read-file-to-stream'
 
 process.stdout.setMaxListeners 0
 
@@ -23,6 +22,4 @@ module.exports =
     analyzeCommand filePath, options
 
   fixApostrophes: (filePath) ->
-    stream = readFile filePath
-    stream = stream.pipe es.map fixApostrophes()
-    stream
+    fixApostrophesCommand filePath
