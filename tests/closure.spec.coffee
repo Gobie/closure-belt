@@ -4,55 +4,6 @@ fs = require 'fs'
 closure = require '../lib/closure'
 
 describe 'closure tests', ->
-#  it 'should parse file', (done) ->
-#    filePath = 'tests/data/test.js'
-#    expectation =
-#      "body": [
-#        "expression":
-#          "arguments": [
-#            "raw": "'goog.a11y.aria'"
-#            "type": "Literal"
-#            "value": "goog.a11y.aria"
-#          ]
-#          "callee":
-#            "computed": no
-#            "object":
-#              "name": "goog"
-#              "type": "Identifier"
-#            "property":
-#              "name": "provide"
-#              "type": "Identifier"
-#            "type": "MemberExpression"
-#          "type": "CallExpression"
-#        "type": "ExpressionStatement"
-#      ,
-#        "expression":
-#          "arguments": [
-#            "raw": "\"goog.a11y.aria.Role\""
-#            "type": "Literal"
-#            "value": "goog.a11y.aria.Role"
-#          ]
-#          "callee":
-#            "computed": no
-#            "object":
-#              "name": "goog"
-#              "type": "Identifier"
-#            "property":
-#              "name": "require"
-#              "type": "Identifier"
-#            "type": "MemberExpression"
-#          "type": "CallExpression"
-#        "type": "ExpressionStatement"
-#      ]
-#      "errors": []
-#      "type": "Program"
-#
-#    stream = closure.parseFile filePath
-#    stream.pipe es.map (data, cb) ->
-#      expect(data).to.eql expectation
-#      done()
-#      cb()
-
   it 'should analyze file', (done) ->
     filePath = 'tests/data/a11y/aria/announcer.js'
     expectation =
@@ -173,7 +124,7 @@ describe 'closure tests', ->
         "goog.userAgent": yes
 
     stream = closure.analyzeFile filePath
-    stream = closure.findMissingRequires stream, filePath
+    stream = closure.findMissingRequires stream
     stream.pipe es.map (data, cb) ->
       expect(data).to.eql expectation
       done()
@@ -262,7 +213,7 @@ describe 'closure tests', ->
         "goog.userAgent": yes
 
     stream = closure.analyzeFile filePath
-    stream = closure.findUnnecessaryRequires stream, filePath
+    stream = closure.findUnnecessaryRequires stream
     stream.pipe es.map (data, cb) ->
       expect(data).to.eql expectation
       done()
