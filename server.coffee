@@ -1,4 +1,4 @@
-closure = require './lib/closure'
+closure = require './lib/index'
 
 console.time 'app'
 process.on 'exit', ->

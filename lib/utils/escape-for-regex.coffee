@@ -1,4 +1,4 @@
-module.exports = do ->
-  regex = /([.*+?^=!:${}()|\[\]\/\\])/g
-  (str) ->
-    (str + "").replace regex, "\\$1"
+regex = /([.*+?^=!:${}()|\[\]\/\\])/g
+
+module.exports = (str) ->
+  (str + "").replace regex, "\\$1"

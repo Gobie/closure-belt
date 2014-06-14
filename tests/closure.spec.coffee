@@ -1,7 +1,7 @@
 expect = require('chai').expect
 es = require 'event-stream'
 fs = require 'fs'
-closure = require '../lib/closure'
+closure = require '../lib/index'
 
 describe 'closure tests', ->
   it 'should fix apostrophes in goog.(require|provide)', (done) ->

@@ -1,6 +1,6 @@
 expect = require('chai').expect
 es = require 'event-stream'
-closure = require '../lib/closure'
+closure = require '../lib/index'
 
 describe 'closure javascript tests', ->
   it 'should analyze file', (done) ->

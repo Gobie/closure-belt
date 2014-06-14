@@ -1,6 +1,6 @@
 expect = require('chai').expect
 es = require 'event-stream'
-closure = require '../lib/closure'
+closure = require '../lib/index'
 
 describe 'closure coffeescript tests', ->
   it 'should analyze file', (done) ->
@@ -34,7 +34,7 @@ describe 'closure coffeescript tests', ->
         "goog.a11y.aria.State.ATOMIC": yes
 
     analyzer = closure.analyzeFile filePath
-    stream = analyzer.stream.pipe es.map (data, cb) ->
+    analyzer.stream.pipe es.map (data, cb) ->
       expect(data).to.eql expectation
       done()
       cb()

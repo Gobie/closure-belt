@@ -1,5 +1,5 @@
-javascript = require './manipulators/javascript'
-coffeescript = require './manipulators/coffeescript'
+javascript = require './javascript'
+coffeescript = require './coffeescript'
 
 module.exports = (ext) ->
   switch ext

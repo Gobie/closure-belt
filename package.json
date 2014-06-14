@@ -1,7 +1,7 @@
 {
   "name": "closure-belt",
   "version": "0.1.0",
-  "main": "lib/closure.coffee",
+  "main": "lib/index.coffee",
   "description": "Closure utility belt.",
   "homepage": "https://github.com/gobie/closure-belt",
   "bugs": "https://github.com/gobie/closure-belt/issues",

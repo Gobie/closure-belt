@@ -1,5 +1,5 @@
 _ = require 'lodash-node'
-traverse = require '../utils/traverse'
+traverse = require '../../utils/traverse'
 esprima = require 'esprima'
 
 manipulator =

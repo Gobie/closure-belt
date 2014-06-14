@@ -1,5 +1,5 @@
 traverse = (node, func) ->
-  if node instanceof  Array
+  if node instanceof Array
     for value, i in node
       unless func.apply this, [i, value, node]
         traverse value, func

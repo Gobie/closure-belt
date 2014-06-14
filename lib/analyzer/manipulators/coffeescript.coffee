@@ -1,4 +1,4 @@
-traverse = require '../utils/traverse'
+traverse = require '../../utils/traverse'
 coffee = require 'coffee-script'
 
 manipulator =
