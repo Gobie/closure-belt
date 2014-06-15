@@ -8,3 +8,4 @@ paths = ['tests/data/**/*.js']
 options =
   loc: no
 closure.analyzeDirs paths, options
+#closure.copyPasteDetector path: './tests/data/'

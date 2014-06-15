@@ -3,17 +3,7 @@ es = require 'event-stream'
 fs = require 'fs'
 closure = require '../lib/index'
 
-describe 'closure tests', ->
-  it 'should fix apostrophes in goog.(require|provide)', (done) ->
-    inputFilePath = 'tests/data/test_apostrophes.js'
-    outputFilePath = 'tests/data/test_apostrophes_fixed.js'
-
-    stream = closure.fixApostrophes inputFilePath
-    stream.pipe es.map (data, cb) ->
-      expect(data).to.eql ("" + fs.readFileSync outputFilePath)
-      done()
-      cb()
-
+describe 'analyze', ->
   it 'should find missing requires', (done) ->
     filePath = 'tests/data/test_tweakui.js'
     expectation =

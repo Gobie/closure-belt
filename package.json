@@ -37,6 +37,7 @@
     "cli-color": "~0.3.2",
     "esprima": "~1.2.2",
     "lodash-node": "~2.4.1",
-    "coffee-errors": "~0.8.6"
+    "coffee-errors": "~0.8.6",
+    "jscpd": "~0.3.2"
   }
 }

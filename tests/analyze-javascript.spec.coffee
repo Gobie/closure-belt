@@ -2,7 +2,7 @@ expect = require('chai').expect
 es = require 'event-stream'
 closure = require '../lib/index'
 
-describe 'closure javascript tests', ->
+describe 'analyze - javascript', ->
   it 'should analyze file', (done) ->
     filePath = 'tests/data/test_analyze.js'
     expectation =
@@ -34,7 +34,7 @@ describe 'closure javascript tests', ->
         "goog.a11y.aria.State.ATOMIC": yes
 
     analyzer = closure.analyzeFile filePath
-    stream = analyzer.stream.pipe es.map (data, cb) ->
+    analyzer.stream.pipe es.map (data, cb) ->
       expect(data).to.eql expectation
       done()
       cb()
