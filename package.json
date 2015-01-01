@@ -40,7 +40,6 @@
     "glob-stream": "^4.0.0",
     "jscpd": "~0.3.2",
     "lodash-node": "~2.4.1",
-    "temporary": "0.0.8",
     "through2": "^0.6.3"
   }
 }
