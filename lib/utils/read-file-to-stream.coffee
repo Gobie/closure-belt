@@ -1,7 +1,12 @@
 fs = require 'fs'
-es = require 'event-stream'
+through2 = require 'through2'
 
 module.exports = (filePath) ->
   stream = fs.createReadStream filePath
-  stream = stream.pipe es.wait()
-  stream
+  stream.pipe through2 (chunk, enc, cb) ->
+    @_content ?= ''
+    @_content += chunk.toString()
+    cb()
+  , (cb) ->
+    @push @_content
+    cb()

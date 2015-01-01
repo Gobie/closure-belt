@@ -19,25 +19,28 @@
   ],
   "keywords": [],
   "devDependencies": {
-    "grunt-contrib-watch": "~0.6.1",
+    "chai": "~1.9.1",
     "grunt-coffeelint": "~0.0.6",
+    "grunt-contrib-watch": "~0.6.1",
     "grunt-mocha-test": "~0.11.0",
     "load-grunt-tasks": "~0.5.0",
-    "time-grunt": "~0.3.1",
-    "chai": "~1.9.1"
+    "sinon": "^1.12.2",
+    "time-grunt": "~0.3.1"
   },
   "scripts": {
     "test": "grunt",
     "start": "coffee server.coffee"
   },
   "dependencies": {
-    "coffee-script": "~1.7.1",
-    "glob": "~4.0.0",
-    "event-stream": "~3.1.5",
+    "async": "^0.9.0",
     "cli-color": "~0.3.2",
-    "esprima": "~1.2.2",
-    "lodash-node": "~2.4.1",
     "coffee-errors": "~0.8.6",
-    "jscpd": "~0.3.2"
+    "coffee-script": "~1.7.1",
+    "esprima": "~1.2.2",
+    "glob": "~4.0.0",
+    "jscpd": "~0.3.2",
+    "lodash-node": "~2.4.1",
+    "temporary": "0.0.8",
+    "through2": "^0.6.3"
   }
 }

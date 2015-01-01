@@ -3,7 +3,7 @@ es = require 'event-stream'
 fs = require 'fs'
 closure = require '../lib/index'
 
-describe 'fix apostrophes in goog.(provide|require)', ->
+xdescribe 'fix apostrophes in goog.(provide|require)', ->
   it 'should fix apostrophes in goog.(require|provide)', (done) ->
     inputFilePath = 'tests/data/test_apostrophes.js'
     outputFilePath = 'tests/data/test_apostrophes_fixed.js'

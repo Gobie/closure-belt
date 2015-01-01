@@ -3,7 +3,7 @@ es = require 'event-stream'
 fs = require 'fs'
 closure = require '../lib/index'
 
-describe 'analyze', ->
+xdescribe 'analyze', ->
   it 'should find missing requires', (done) ->
     filePath = 'tests/data/test_tweakui.js'
     expectation =

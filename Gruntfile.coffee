@@ -11,7 +11,7 @@ module.exports = (grunt) ->
           clearRequireCache: yes
         src: ['tests/*.coffee']
     coffeelint:
-      lib: src: ['lib/**/*.coffee']
+      lib: src: ['lib/**/*.coffee', 'index.coffee']
       server: src: ['server.coffee']
       tests: src: ['tests/*.coffee']
       options:

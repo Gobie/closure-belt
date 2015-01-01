@@ -2,7 +2,7 @@ expect = require('chai').expect
 es = require 'event-stream'
 closure = require '../lib/index'
 
-describe 'analyze - coffeescript', ->
+xdescribe 'analyze - coffeescript', ->
   it 'should analyze file', (done) ->
     filePath = 'tests/data/test_analyze.coffee'
     expectation =
