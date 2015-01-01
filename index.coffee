@@ -19,8 +19,7 @@ class ClosureBelt
 
     errorHandler = (msg, filePath) ->
       (err) ->
-        filesToProcess[filePath] = err if filePath
-        console.error "Error in #{msg}", err
+        filesToProcess[filePath] = err
 
     stream = globStream.create paths
     stream = stream.pipe through2.obj (chunk, enc, cb) ->
@@ -29,7 +28,7 @@ class ClosureBelt
 
     stream = @_readFile stream, errorHandler
     stream = @_createAST stream, errorHandler
-    stream = @_transformAST stream, errorHandler
+    stream = @_transform stream, errorHandler
     stream = @_writeFile stream, errorHandler
 
     stream = stream.pipe through2.obj (chunk, enc, cb) ->
@@ -78,11 +77,11 @@ class ClosureBelt
 
       cb null, chunk
 
-  _transformAST: (stream, errorHandler) ->
+  _transform: (stream, errorHandler) ->
     stream.pipe through2.obj (chunk, enc, cb) =>
       for transform, i in @_transforms
         chunk.stream = chunk.stream.pipe transform
-        chunk.stream.on 'error', errorHandler "transform #{i}"
+        chunk.stream.on 'error', errorHandler "transform #{i}", chunk.path
 
       cb null, chunk
 
