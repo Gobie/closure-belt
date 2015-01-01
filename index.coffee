@@ -1,11 +1,7 @@
-glob = require 'glob'
-async = require 'async'
-_ = require 'lodash-node'
-coffee = require 'coffee-script'
 fs = require 'fs'
-temporary = require 'temporary'
 through2 = require 'through2'
-readFile = require './lib/utils/read-file-to-stream'
+globStream = require 'glob-stream'
+coffee = require 'coffee-script'
 
 process.stdout.setMaxListeners 0
 
@@ -17,60 +13,50 @@ class ClosureBelt
     @_transforms.push transform
     @
 
-  # TODO extract expand paths
   process: (paths, done) ->
-    paths = [paths] unless _.isArray paths
-    async.waterfall [
-      (next) ->
-        async.map paths, (path, cb) ->
-          glob path, {}, cb
-        , next
-      (filePaths, next) ->
-        next null, _.flatten filePaths
-      (filePaths, next) =>
-        async.map filePaths, @processFile, next
-    ], (err, results) ->
-      done? err, results
-
-  processFile: (filePath, done) =>
-    stream = readFile filePath
-    stream = @_createASTStream stream
-
+    stream = globStream.create paths
+    stream = @_readFile stream
+    stream = @_createAST stream
     for transform in @_transforms
       stream = stream.pipe transform
-
-    @_writeASTStreamToFile stream, filePath, done
+    stream = @_writeFile stream
+    stream.on 'finish', ->
+      done()
     return
 
-  _createASTStream: (stream) ->
+  _readFile: (stream) ->
     stream.pipe through2.obj (chunk, enc, cb) ->
-      content = chunk.toString()
       try
-        ast = coffee.nodes content
+        content = fs.readFileSync chunk.path
       catch err
         return cb err
-
-      cb null, {content, ast}
+      console.log '_readFile', chunk.path
+      cb null,
+        path: chunk.path
+        content: content.toString()
     .on 'error', (err) ->
-      console.log 'to ast err', err
+      console.error 'read file', err
 
-  _writeASTStreamToFile: (stream, filePath, done) ->
-    tempFile = new temporary.File()
-    tempFilePath = tempFile.path
-
-    stream = stream.pipe through2.obj (chunk, enc, cb) ->
-      cb null, chunk.content
+  _createAST: (stream) ->
+    stream.pipe through2.obj (chunk, enc, cb) ->
+      try
+        chunk.ast = coffee.nodes chunk.content
+      catch err
+        return cb err
+      console.log '_createAST', chunk.path
+      cb null, chunk
     .on 'error', (err) ->
-      console.log 'ast to string err', err
+      console.error 'to ast err', err
 
-    outStream = stream.pipe(fs.createWriteStream tempFilePath)
+  _writeFile: (stream) ->
+    stream.pipe through2.obj (chunk, enc, cb) ->
+      try
+        fs.writeFileSync chunk.path, chunk.content
+      catch err
+        return cb err
+      console.log '_writeFile', chunk.path
+      cb null, chunk.path
     .on 'error', (err) ->
-      console.log 'out stream err', err
-
-    stream.on 'end', ->
-      fs.rename tempFilePath, filePath, (err) ->
-        console.log 'rename error', err if err
-        done null, filePath
-    outStream
+      console.error 'ast to string err', err
 
 module.exports = ClosureBelt

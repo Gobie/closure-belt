@@ -37,7 +37,7 @@
     "coffee-errors": "~0.8.6",
     "coffee-script": "~1.7.1",
     "esprima": "~1.2.2",
-    "glob": "~4.0.0",
+    "glob-stream": "^4.0.0",
     "jscpd": "~0.3.2",
     "lodash-node": "~2.4.1",
     "temporary": "0.0.8",

@@ -1,0 +1,1 @@
+console.log "goog.a11y.aria.Announcer
