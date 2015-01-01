@@ -1,26 +1,62 @@
-require 'coffee-errors'
-glob = require 'glob'
-fixApostrophesCommand = require './commands/fix-apostrophes'
-analyzeCommand = require './commands/analyze'
-cpdCommand = require './commands/cpd'
+fs = require 'fs'
+through2 = require 'through2'
+globStream = require 'glob-stream'
+_ = require 'lodash-node'
 
-process.stdout.setMaxListeners 0
+class ClosureBelt
+  constructor: (options) ->
+    @_options = _.defaults options || {},
+      log: no
+    @_transforms = []
 
-module.exports =
-  analyzeDirs: (dirPaths, options) ->
-    for dirPath in dirPaths
-      glob dirPath, {}, (err, filePaths) =>
-        for filePath in filePaths
-          analyzer = @analyzeFile filePath, options
-          analyzer.findMissingRequires()
-          analyzer.findUnnecessaryRequires()
-          analyzer.output()
+  use: (transform) ->
+    @_transforms.push transform
+    @
 
-  analyzeFile: (filePath, options = {}) ->
-    analyzeCommand filePath, options
+  process: (paths, done) ->
+    filesStatus = {}
+    stream = globStream.create paths
+    stream = @_remember stream, filesStatus
+    stream = @_readFile stream, @_createErrorHandler filesStatus
+    stream = @_transform stream, @_createErrorHandler filesStatus
+    stream = @_recall stream, filesStatus, done
+    return
 
-  fixApostrophes: (filePath) ->
-    fixApostrophesCommand filePath
+  _createErrorHandler: (filesStatus) ->
+    (msg, filePath) =>
+      (err) =>
+        filesStatus[filePath] = err
+        console.warn "error in #{msg}: #{filePath}\n", err if @_options.log
 
-  copyPasteDetector: (options = {}) ->
-    cpdCommand options
+  _remember: (stream, filesStatus) ->
+    stream.pipe through2.obj (chunk, enc, cb) ->
+      filesStatus[chunk.path] = no
+      cb null, chunk
+
+  _readFile: (stream, errorHandler) ->
+    stream.pipe through2.obj (chunk, enc, cb) ->
+      stream = fs.createReadStream chunk.path
+      stream.on 'error', errorHandler 'read', chunk.path
+      cb null,
+        path: chunk.path
+        stream: stream
+
+  _transform: (stream, errorHandler) ->
+    stream.pipe through2.obj (chunk, enc, cb) =>
+      for transform, i in @_transforms
+        chunk.stream = chunk.stream.pipe transform chunk.path
+        chunk.stream.on 'error', errorHandler "transformation ##{i + 1}", chunk.path
+      cb null, chunk
+
+  _recall: (stream, filesStatus, done) ->
+    stream.pipe through2.obj (chunk, enc, cb) ->
+      chunk.stream = chunk.stream.pipe through2.obj (chunk, enc, cb) ->
+        filesStatus[chunk.path] = yes
+        cb null, chunk
+      chunk.stream.on 'finish', ->
+        done filesStatus if _.every filesStatus
+      cb null, chunk
+    .on 'finish', ->
+      done filesStatus if _.isEmpty filesStatus
+
+module.exports = ClosureBelt

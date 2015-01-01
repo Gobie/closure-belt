@@ -2,6 +2,9 @@ expect = require('chai').expect
 sinon = require 'sinon'
 fs = require 'fs'
 ClosureBelt = require '../index'
+readFileStream = require '../lib/streams/read-file'
+writeFileStream = require '../lib/streams/write-file'
+createASTStream = require '../lib/streams/coffee-create-ast'
 
 describe 'ClosureBelt', ->
 
@@ -10,8 +13,7 @@ describe 'ClosureBelt', ->
     it 'should do nothing with non-existing file', (done) ->
       testFilepath = 'unknown.coffee'
       belt = new ClosureBelt()
-      belt.process testFilepath, (err, results) ->
-        expect(err).to.be.null
+      belt.process testFilepath, (results) ->
         expect(results).to.eql {}
         done()
 
@@ -19,19 +21,22 @@ describe 'ClosureBelt', ->
       testFilepath = 'tests/data/valid.coffee'
       testFileContent = fs.readFileSync(testFilepath).toString()
       belt = new ClosureBelt()
-      belt.process testFilepath, (err, results) ->
+      belt.use readFileStream
+      belt.use createASTStream
+      belt.use writeFileStream
+      belt.process testFilepath, (results) ->
         newTestFileContent = fs.readFileSync(testFilepath).toString()
         expect(newTestFileContent).to.eql testFileContent
-        expect(err).to.be.null
-        expect(results).to.eql
-          '/Users/michalbrasna/Projects/closure-belt/tests/data/valid.coffee': yes
+        expect(results['/Users/michalbrasna/Projects/closure-belt/tests/data/valid.coffee']).to.be.true
         done()
 
-    it 'should throw error with invalid coffeescript file', (done) ->
+    it 'should process invalid coffeescript file and return error in results', (done) ->
       testFilepath = ['tests/data/invalid.coffee', 'tests/data/valid.coffee']
       belt = new ClosureBelt()
-      belt.process testFilepath, (err, results) ->
-        expect(err).to.be.null
+      belt.use readFileStream
+      belt.use createASTStream
+      belt.use writeFileStream
+      belt.process testFilepath, (results) ->
         expect(results['/Users/michalbrasna/Projects/closure-belt/tests/data/invalid.coffee']).to.be.error
         expect(results['/Users/michalbrasna/Projects/closure-belt/tests/data/valid.coffee']).to.be.true
         done()
