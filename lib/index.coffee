@@ -7,6 +7,7 @@ class ClosureBelt
   constructor: (options) ->
     @_options = _.defaults options || {},
       log: no
+      resolveFileStatus: (chunk) -> yes
     @_transforms = []
 
   use: (transform) ->
@@ -14,23 +15,23 @@ class ClosureBelt
     @
 
   process: (paths, done) ->
-    filesStatus = {}
+    status = {}
     stream = globStream.create paths
-    stream = @_remember stream, filesStatus
-    stream = @_readFile stream, @_createErrorHandler filesStatus
-    stream = @_transform stream, @_createErrorHandler filesStatus
-    stream = @_recall stream, filesStatus, done
+    stream = @_remember stream, status
+    stream = @_readFile stream, @_createErrorHandler status
+    stream = @_transform stream, @_createErrorHandler status
+    stream = @_recall stream, status, done
     return
 
-  _createErrorHandler: (filesStatus) ->
+  _createErrorHandler: (status) ->
     (msg, filePath) =>
       (err) =>
-        filesStatus[filePath] = err
+        status[filePath] = err
         console.warn "error in #{msg}: #{filePath}\n", err if @_options.log
 
-  _remember: (stream, filesStatus) ->
+  _remember: (stream, status) ->
     stream.pipe through2.obj (chunk, enc, cb) ->
-      filesStatus[chunk.path] = no
+      status[chunk.path] = undefined
       cb null, chunk
 
   _readFile: (stream, errorHandler) ->
@@ -48,15 +49,15 @@ class ClosureBelt
         chunk.stream.on 'error', errorHandler "transformation ##{i + 1}", chunk.path
       cb null, chunk
 
-  _recall: (stream, filesStatus, done) ->
-    stream.pipe through2.obj (chunk, enc, cb) ->
-      chunk.stream = chunk.stream.pipe through2.obj (chunk, enc, cb) ->
-        filesStatus[chunk.path] = yes
+  _recall: (stream, status, done) ->
+    stream.pipe through2.obj (chunk, enc, cb) =>
+      chunk.stream = chunk.stream.pipe through2.obj (chunk, enc, cb) =>
+        status[chunk.path] = @_options.resolveFileStatus chunk
         cb null, chunk
       chunk.stream.on 'finish', ->
-        done filesStatus if _.every filesStatus
+        done status if _.every status
       cb null, chunk
     .on 'finish', ->
-      done filesStatus if _.isEmpty filesStatus
+      done status if _.isEmpty status
 
 module.exports = ClosureBelt

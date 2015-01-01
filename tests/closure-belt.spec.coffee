@@ -40,3 +40,13 @@ describe 'ClosureBelt', ->
         expect(results[path.resolve __dirname, 'data/invalid.coffee']).to.be.error
         expect(results[path.resolve __dirname, 'data/valid.coffee']).to.be.true
         done()
+
+    it 'should process file and return gathered information', (done) ->
+      testFilepath = ['tests/data/valid.coffee']
+      belt = new ClosureBelt resolveFileStatus: (chunk) -> chunk.ast
+      belt.use readFileStream
+      belt.use createASTStream
+      belt.use writeFileStream
+      belt.process testFilepath, (results) ->
+        expect(results[path.resolve __dirname, 'data/valid.coffee']).to.be.object
+        done()
