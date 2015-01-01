@@ -12,7 +12,6 @@ module.exports = (grunt) ->
         src: ['tests/*.coffee']
     coffeelint:
       lib: src: ['lib/**/*.coffee', 'index.coffee']
-      server: src: ['server.coffee']
       tests: src: ['tests/*.coffee']
       options:
         max_line_length:
@@ -21,9 +20,6 @@ module.exports = (grunt) ->
       lib:
         files: '<%= coffeelint.lib.src %>'
         tasks: ['coffeelint:lib', 'mochaTest:tests']
-      server:
-        files: '<%= coffeelint.server.src %>'
-        tasks: ['coffeelint:server']
       tests:
         files: '<%= mochaTest.tests.src %>',
         tasks: ['coffeelint:tests', 'mochaTest:tests']
