@@ -65,7 +65,6 @@ class ClosureBelt
       cb null,
         path: chunk.path
         stream: stream
-    .on 'error', errorHandler 'read creator'
 
   _createAST: (stream, errorHandler) ->
     stream.pipe through2.obj (chunk, enc, cb) ->
@@ -78,7 +77,6 @@ class ClosureBelt
       chunk.stream.on 'error', errorHandler 'ast', chunk.path
 
       cb null, chunk
-    .on 'error', errorHandler 'ast creator'
 
   _transformAST: (stream, errorHandler) ->
     stream.pipe through2.obj (chunk, enc, cb) =>
@@ -87,7 +85,6 @@ class ClosureBelt
         chunk.stream.on 'error', errorHandler "transform #{i}"
 
       cb null, chunk
-    .on 'error', errorHandler 'transform creator'
 
   _writeFile: (stream, errorHandler) ->
     stream.pipe through2.obj (chunk, enc, cb) ->
@@ -100,6 +97,5 @@ class ClosureBelt
       chunk.stream.on 'error', errorHandler 'write', chunk.path
 
       cb null, chunk
-    .on 'error', errorHandler 'write creator'
 
 module.exports = ClosureBelt
