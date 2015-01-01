@@ -1,6 +1,6 @@
-expect = require('chai').expect
-sinon = require 'sinon'
 fs = require 'fs'
+path = require 'path'
+expect = require('chai').expect
 ClosureBelt = require '../index'
 readFileStream = require '../lib/streams/read-file'
 writeFileStream = require '../lib/streams/write-file'
@@ -27,7 +27,7 @@ describe 'ClosureBelt', ->
       belt.process testFilepath, (results) ->
         newTestFileContent = fs.readFileSync(testFilepath).toString()
         expect(newTestFileContent).to.eql testFileContent
-        expect(results['/Users/michalbrasna/Projects/closure-belt/tests/data/valid.coffee']).to.be.true
+        expect(results[path.resolve __dirname, 'data/valid.coffee']).to.be.true
         done()
 
     it 'should process invalid coffeescript file and return error in results', (done) ->
@@ -37,6 +37,6 @@ describe 'ClosureBelt', ->
       belt.use createASTStream
       belt.use writeFileStream
       belt.process testFilepath, (results) ->
-        expect(results['/Users/michalbrasna/Projects/closure-belt/tests/data/invalid.coffee']).to.be.error
-        expect(results['/Users/michalbrasna/Projects/closure-belt/tests/data/valid.coffee']).to.be.true
+        expect(results[path.resolve __dirname, 'data/invalid.coffee']).to.be.error
+        expect(results[path.resolve __dirname, 'data/valid.coffee']).to.be.true
         done()
