@@ -1,5 +1,5 @@
 through2 = require 'through2'
-_ = require 'lodash-node'
+optionsHelper = require '../utils/options-helper'
 
 getLineAndColumn = (locNode) ->
   line: locNode['locationData']['first_line']
@@ -35,18 +35,15 @@ parseNode = (options, results) ->
       results.uses[key] = if options.loc then getLineAndColumn node.base else yes
       yes
 
-module.exports = (streamOptions) ->
-  (globalOptions, filePath) ->
-    options = _.defaults streamOptions or {},
-      _.defaults globalOptions or {},
-        loc: no
-        validUseRegex: /^goog\./
-
-    through2.obj (chunk, enc, cb) ->
-      results =
-        provides: {}
-        requires: {}
-        uses: {}
-      chunk.ast.traverseChildren no, parseNode options, results
-      chunk.dependencies = results
-      cb null, chunk
+module.exports = optionsHelper
+  loc: no
+  validUseRegex: /^goog\./
+, (options, filePath) ->
+  through2.obj (chunk, enc, cb) ->
+    results =
+      provides: {}
+      requires: {}
+      uses: {}
+    chunk.ast.traverseChildren no, parseNode options, results
+    chunk.dependencies = results
+    cb null, chunk

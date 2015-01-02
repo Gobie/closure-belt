@@ -57,8 +57,7 @@ describe 'ClosureBelt', ->
         resolveFileStatus: (chunk) -> chunk.dependencies
       belt.use readFileStream()
       belt.use createASTStream()
-      belt.use closureDependenciesStream
-        validUseRegex: /^(goog|este)\./
+      belt.use closureDependenciesStream()
       belt.process testFilepath, (results) ->
         expect(results[path.resolve __dirname, 'data/valid.coffee']).to.eql
           'uses':
