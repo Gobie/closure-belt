@@ -2,8 +2,8 @@ through2 = require 'through2'
 optionsHelper = require '../utils/options-helper'
 
 getLineAndColumn = (locNode) ->
-  line: locNode['locationData']['first_line']
-  column: locNode['locationData']['first_column']
+  line: locNode.locationData.first_line
+  column: locNode.locationData.first_column
 
 parseNode = (options, results) ->
   apostrophesRegex = /["']/g

@@ -28,17 +28,26 @@ describe 'ClosureBelt', ->
       belt.process testFilepath, (results) ->
         newTestFileContent = fs.readFileSync(testFilepath).toString()
         expect(newTestFileContent).to.eql testFileContent
-        expect(results[path.resolve __dirname, 'data/valid.coffee']).to.be.true
+        expect(results[path.resolve __dirname, 'data/valid.coffee']).to.be.yes
         done()
 
-    it 'should process invalid coffeescript file and return error in results', (done) ->
+    it 'should process invalid coffeescript files and return error in results', (done) ->
+      testFilepath = 'tests/data/invalid.coffee'
+      belt = new ClosureBelt()
+      belt.use readFileStream()
+      belt.use createASTStream()
+      belt.process testFilepath, (results) ->
+        expect(results[path.resolve __dirname, 'data/invalid.coffee']).to.be.error
+        done()
+
+    it 'should process invalid and valid coffeescript files and return error in results', (done) ->
       testFilepath = ['tests/data/invalid.coffee', 'tests/data/valid.coffee']
       belt = new ClosureBelt()
       belt.use readFileStream()
       belt.use createASTStream()
       belt.process testFilepath, (results) ->
         expect(results[path.resolve __dirname, 'data/invalid.coffee']).to.be.error
-        expect(results[path.resolve __dirname, 'data/valid.coffee']).to.be.true
+        expect(results[path.resolve __dirname, 'data/valid.coffee']).to.be.yes
         done()
 
     it 'should process file and return gathered information', (done) ->
@@ -78,4 +87,70 @@ describe 'ClosureBelt', ->
             'goog.a11y.aria.State': yes
             'goog.dom': yes
             'goog.object': yes
+        done()
+
+    it 'should list missing requires', (done) ->
+      testFilepath = ['tests/data/missing_requires.coffee']
+      belt = new ClosureBelt
+        resolveFileStatus: (chunk) -> chunk.dependencies
+      belt.use readFileStream()
+      belt.use createASTStream()
+      belt.use closureDependenciesStream()
+      belt.process testFilepath, (results) ->
+        expect(results[path.resolve __dirname, 'data/missing_requires.coffee']).to.eql
+          provides:
+            'goog.tweak.EntriesPanel': yes
+            'goog.tweak.TweakUi': yes
+          requires:
+            'goog.array': yes
+            'goog.asserts': yes
+            'goog.dom.DomHelper': yes
+            'goog.object': yes
+            'goog.style': yes
+            'goog.tweak': yes
+            'goog.ui.Zippy': yes
+            'goog.userAgent': yes
+          uses:
+            'goog.provide': yes
+            'goog.require': yes
+            'goog.tweak.TweakUi': yes
+            'goog.tweak.TweakUi.ROOT_PANEL_CLASS_': yes
+            'goog.getCssName': yes
+            'goog.tweak.TweakUi.ENTRY_CSS_CLASS_': yes
+            'goog.tweak.TweakUi.ENTRY_CSS_CLASSES_': yes
+            'goog.tweak.TweakUi.ENTRY_GROUP_CSS_CLASSES_': yes
+            'goog.tweak.TweakUi.STYLE_SHEET_INSTALLED_MARKER_': yes
+            'goog.tweak.TweakUi.CSS_STYLES_': yes
+            'goog.tweak.TweakUi.create': yes
+            'goog.tweak.TweakUi.createCollapsible': yes
+            'goog.tweak.TweakUi.entryCompare_': yes
+            'goog.tweak.TweakUi.isGroupEntry_': yes
+            'goog.tweak.TweakUi.extractBooleanGroupEntries_': yes
+            'goog.tweak.TweakUi.extractNamespace_': yes
+            'goog.tweak.TweakUi.getNamespacedLabel_': yes
+            'goog.tweak.TweakUi.prototype.getRootElement': yes
+            'goog.tweak.TweakUi.prototype.restartWithAppliedTweaks_': yes
+            'goog.tweak.TweakUi.prototype.installStyles_': yes
+            'goog.tweak.TweakUi.prototype.render': yes
+            'goog.tweak.TweakUi.prototype.onNewRegisteredEntry_': yes
+            'goog.tweak.TweakUi.prototype.insertEntry_': yes
+            'goog.tweak.EntriesPanel': yes
+            'goog.tweak.EntriesPanel.prototype.getRootElement': yes
+            'goog.tweak.EntriesPanel.prototype.render': yes
+            'goog.tweak.EntriesPanel.prototype.insertEntry': yes
+            'goog.tweak.EntriesPanel.prototype.createEntryElem_': yes
+            'goog.tweak.EntriesPanel.prototype.onHelpClick_': yes
+            'goog.tweak.EntriesPanel.prototype.showDescription_': yes
+            'goog.tweak.EntriesPanel.prototype.createHelpElem_': yes
+            'goog.tweak.EntriesPanel.prototype.toggleAllDescriptions': yes
+            'goog.tweak.EntriesPanel.prototype.createComboBoxDom_': yes
+            'goog.tweak.EntriesPanel.prototype.createBooleanSettingDom_': yes
+            'goog.tweak.EntriesPanel.prototype.createSubPanelDom_': yes
+            'goog.tweak.EntriesPanel.prototype.createTextBoxDom_': yes
+            'goog.tweak.EntriesPanel.prototype.createButtonActionDom_': yes
+            'goog.tweak.EntriesPanel.prototype.createTweakEntryDom_': yes
+            'goog.tweak.NamespaceEntry_': yes
+            'goog.inherits': yes
+            'goog.tweak.BaseEntry': yes
+            'goog.tweak.NamespaceEntry_.ID_PREFIX': yes
         done()
