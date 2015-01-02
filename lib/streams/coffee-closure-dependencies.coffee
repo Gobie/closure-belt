@@ -1,29 +1,29 @@
 through2 = require 'through2'
 optionsHelper = require '../utils/options-helper'
+nodes = require 'coffee-script/lib/coffee-script/nodes'
 
 getLineAndColumn = (locNode) ->
   line: locNode.locationData.first_line
   column: locNode.locationData.first_column
 
 parseNode = (options, results) ->
+
   apostrophesRegex = /["']/g
   (node) ->
-    if node.variable?.base? and node.variable.properties? and node.args?
-      if node.variable.base.value is 'goog' and
-      node.variable.properties[0].name.value is 'provide'
+    if node instanceof nodes.Call and node.variable instanceof nodes.Value
+      if node.variable.base.value is 'goog' and node.variable.properties[0].name.value is 'provide'
         node = node.args[0].base
         namespace = node.value.replace apostrophesRegex, ''
         results.provides[namespace] = if options.loc then getLineAndColumn node else yes
-        return yes
+        return no
 
-      if node.variable.base.value is 'goog' and
-      node.variable.properties[0].name.value is 'require'
+      if node.variable.base.value is 'goog' and node.variable.properties[0].name.value is 'require'
         node = node.args[0].base
         namespace = node.value.replace apostrophesRegex, ''
         results.requires[namespace] = if options.loc then getLineAndColumn node else yes
-        return yes
+        return no
 
-    if node.base?.value? and node.properties?
+    if node instanceof nodes.Value and node.base instanceof nodes.Literal
       parts = []
       parts.push node.base.value
       for property in node.properties
@@ -33,7 +33,8 @@ parseNode = (options, results) ->
       return yes unless key.match options.validUseRegex
 
       results.uses[key] = if options.loc then getLineAndColumn node.base else yes
-      yes
+
+    yes
 
 module.exports = optionsHelper
   loc: no
@@ -44,6 +45,6 @@ module.exports = optionsHelper
       provides: {}
       requires: {}
       uses: {}
-    chunk.ast.traverseChildren no, parseNode options, results
+    chunk.ast.traverseChildren yes, parseNode options, results
     chunk.dependencies = results
     cb null, chunk

@@ -71,14 +71,22 @@ describe 'ClosureBelt', ->
       belt.process testFilepath, (results) ->
         expect(results[path.resolve __dirname, 'data/valid.coffee']).to.eql
           'uses':
-            'goog.Disposable': yes
             'goog.a11y.aria.Announcer': yes
+            'goog.a11y.aria.Announcer.base': yes
             'goog.a11y.aria.Announcer.prototype.disposeInternal': yes
             'goog.a11y.aria.Announcer.prototype.getLiveRegion_': yes
             'goog.a11y.aria.Announcer.prototype.say': yes
+            'goog.a11y.aria.LivePriority.POLITE': yes
+            'goog.a11y.aria.State.ATOMIC': yes
+            'goog.a11y.aria.State.HIDDEN': yes
+            'goog.a11y.aria.State.LIVE': yes
+            'goog.a11y.aria.removeState': yes
+            'goog.a11y.aria.setState': yes
+            'goog.Disposable': yes
+            'goog.dom.getDomHelper': yes
+            'goog.dom.setTextContent': yes
             'goog.inherits': yes
-            'goog.provide': yes
-            'goog.require': yes
+            'goog.object.forEach': yes
           'provides':
             'goog.a11y.aria.Announcer': yes
           'requires':
@@ -116,11 +124,8 @@ describe 'ClosureBelt', ->
               'goog.ui.Zippy': yes
               'goog.userAgent': yes
             uses:
-              'goog.provide': yes
-              'goog.require': yes
               'goog.tweak.TweakUi': yes
               'goog.tweak.TweakUi.ROOT_PANEL_CLASS_': yes
-              'goog.getCssName': yes
               'goog.tweak.TweakUi.ENTRY_CSS_CLASS_': yes
               'goog.tweak.TweakUi.ENTRY_CSS_CLASSES_': yes
               'goog.tweak.TweakUi.ENTRY_GROUP_CSS_CLASSES_': yes
@@ -155,15 +160,33 @@ describe 'ClosureBelt', ->
               'goog.tweak.EntriesPanel.prototype.createButtonActionDom_': yes
               'goog.tweak.EntriesPanel.prototype.createTweakEntryDom_': yes
               'goog.tweak.NamespaceEntry_': yes
-              'goog.inherits': yes
-              'goog.tweak.BaseEntry': yes
               'goog.tweak.NamespaceEntry_.ID_PREFIX': yes
+              'goog.tweak.NumericSetting': yes
+              'goog.tweak.StringSetting': yes
+              'goog.tweak.TweakUi.prototype.restartWithAppliedTweaks_': yes
+              'goog.tweak.getRegistry': yes
+              'goog.ui.Zippy': yes
+              'goog.userAgent.IE': yes
+              'goog.userAgent.MOBILE': yes
+              'goog.array.binarySearch': yes
+              'goog.array.defaultCompare': yes
+              'goog.array.insertAt': yes
+              'goog.asserts.assert': yes
+              'goog.asserts.assertInstanceof': yes
+              'goog.bind': yes
+              'goog.dom.getDomHelper': yes
+              'goog.dom.setTextContent': yes
+              'goog.getCssName': yes
+              'goog.inherits': yes
+              'goog.object.getValues': yes
+              'goog.style.installStyles': yes
+              'goog.style.setElementShown': yes
+              'goog.tweak.BaseEntry': yes
+              'goog.tweak.BaseEntry.call': yes
+              'goog.tweak.BooleanGroup': yes
+              'goog.tweak.BooleanInGroupSetting': yes
+              'goog.tweak.BooleanSetting': yes
+              'goog.tweak.ButtonAction': yes
           un:
-            'goog.array': yes
-            'goog.asserts': yes
             'goog.dom.DomHelper': yes
-            'goog.object': yes
-            'goog.style': yes
-            'goog.ui.Zippy': yes
-            'goog.userAgent': yes
         done()
