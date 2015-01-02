@@ -45,7 +45,7 @@ class ClosureBelt
   _transform: (stream, errorHandler) ->
     stream.pipe through2.obj (chunk, enc, cb) =>
       for transform, i in @_transforms
-        chunk.stream = chunk.stream.pipe transform chunk.path
+        chunk.stream = chunk.stream.pipe transform @_options, chunk.path
         chunk.stream.on 'error', errorHandler "transformation ##{i + 1}", chunk.path
       cb null, chunk
 
