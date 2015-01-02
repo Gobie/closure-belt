@@ -41,6 +41,8 @@ module.exports = optionsHelper
   validUseRegex: /^goog\./
 , (options, filePath) ->
   through2.obj (chunk, enc, cb) ->
+    return cb new Error 'no ast in stream' unless chunk.ast
+
     results =
       provides: {}
       requires: {}
