@@ -2,6 +2,10 @@ module.exports = (grunt) ->
   require('time-grunt')(grunt);
   require('load-grunt-tasks')(grunt);
 
+  files =
+    src: ['lib/**/*.coffee', 'index.coffee']
+    tests: ['tests/**/*.spec.coffee']
+
   grunt.initConfig
     mochaTest:
       tests:
@@ -9,19 +13,19 @@ module.exports = (grunt) ->
           reporter: 'spec'
           require: 'coffee-script/register'
           clearRequireCache: yes
-        src: ['tests/*.coffee']
+        src: files.tests
     coffeelint:
-      lib: src: ['lib/**/*.coffee', 'index.coffee']
-      tests: src: ['tests/*.coffee']
+      lib: src: files.src
+      tests: src: files.tests
       options:
         max_line_length:
           value: 120
     watch:
       lib:
-        files: '<%= coffeelint.lib.src %>'
+        files: files.src
         tasks: ['coffeelint:lib', 'mochaTest:tests']
       tests:
-        files: '<%= mochaTest.tests.src %>',
+        files: files.tests,
         tasks: ['coffeelint:tests', 'mochaTest:tests']
 
   grunt.registerTask 'default', ['coffeelint', 'mochaTest']
