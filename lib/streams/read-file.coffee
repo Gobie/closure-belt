@@ -3,11 +3,6 @@ optionsHelper = require '../utils/options-helper'
 
 module.exports = optionsHelper {}, (options, filePath) ->
   through2.obj (chunk, enc, cb) ->
-    @_content ?= ''
-    @_content += chunk.toString()
-    cb()
-  , (cb) ->
-    @push
+    cb null,
       path: filePath
-      content: @_content
-    cb()
+      contents: chunk.toString()

@@ -5,7 +5,7 @@ optionsHelper = require '../utils/options-helper'
 module.exports = optionsHelper {}, (options, filePath) ->
   through2.obj (chunk, enc, cb) ->
     try
-      fs.writeFileSync chunk.path, chunk.content
+      fs.writeFileSync chunk.path, chunk.contents
     catch err
       return cb err
     cb null, chunk

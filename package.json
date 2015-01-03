@@ -28,13 +28,12 @@
     "time-grunt": "~0.3.1"
   },
   "scripts": {
-    "test": "grunt",
-    "start": "coffee server.coffee"
+    "test": "grunt"
   },
   "dependencies": {
     "coffee-script": "^1.8.0",
-    "glob-stream": "^4.0.0",
     "lodash-node": "~2.4.1",
-    "through2": "^0.6.3"
+    "through2": "^0.6.3",
+    "vinyl-fs": "^0.3.13"
   }
 }
