@@ -6,7 +6,7 @@ readFileStream = require '../lib/streams/read-file'
 writeFileStream = require '../lib/streams/write-file'
 createASTStream = require '../lib/streams/coffee-create-ast'
 closureDependenciesStream = require '../lib/streams/coffee-closure-dependencies'
-unnecessaryRequiresStream = require '../lib/streams/unnecessary-requires'
+redundantRequiresStream = require '../lib/streams/redundant-requires'
 
 describe 'ClosureBelt', ->
 
@@ -98,19 +98,19 @@ describe 'ClosureBelt', ->
             'goog.object': yes
         done()
 
-    it 'should list unnecessary requires', (done) ->
-      testFilepath = ['tests/data/unnecessary_requires.coffee']
+    it 'should list redundant requires', (done) ->
+      testFilepath = ['tests/data/redundant-requires.coffee']
       belt = new ClosureBelt
         resolveFileStatus: (chunk) ->
-          dep: chunk.dependencies
-          un: chunk.unnecessary_requires
+          dependencies: chunk.dependencies
+          redundant_requires: chunk.redundant_requires
       belt.use readFileStream
       belt.use createASTStream
       belt.use closureDependenciesStream
-      belt.use unnecessaryRequiresStream
+      belt.use redundantRequiresStream
       belt.process testFilepath, (results) ->
-        expect(results[path.resolve __dirname, 'data/unnecessary_requires.coffee']).to.eql
-          dep:
+        expect(results[path.resolve __dirname, 'data/redundant-requires.coffee']).to.eql
+          dependencies:
             provides:
               'goog.tweak.EntriesPanel': yes
               'goog.tweak.TweakUi': yes
@@ -187,6 +187,6 @@ describe 'ClosureBelt', ->
               'goog.tweak.BooleanInGroupSetting': yes
               'goog.tweak.BooleanSetting': yes
               'goog.tweak.ButtonAction': yes
-          un:
+          redundant_requires:
             'goog.dom.DomHelper': yes
         done()
