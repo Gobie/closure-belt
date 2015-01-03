@@ -1,8 +1,7 @@
 through2 = require 'through2'
-optionsHelper = require '../utils/options-helper'
 
-module.exports = optionsHelper {}, (options, filePath) ->
+module.exports = (options) ->
   through2.obj (chunk, enc, cb) ->
     cb null,
-      path: filePath
+      path: options.path
       contents: chunk.toString()

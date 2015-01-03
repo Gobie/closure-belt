@@ -23,9 +23,9 @@ describe 'ClosureBelt', ->
       testFilepath = 'tests/data/valid.coffee'
       testFileContent = fs.readFileSync(testFilepath).toString()
       belt = new ClosureBelt()
-      belt.use readFileStream()
-      belt.use createASTStream()
-      belt.use writeFileStream()
+      belt.use readFileStream
+      belt.use createASTStream
+      belt.use writeFileStream
       belt.process testFilepath, (results) ->
         newTestFileContent = fs.readFileSync(testFilepath).toString()
         expect(newTestFileContent).to.eql testFileContent
@@ -35,8 +35,8 @@ describe 'ClosureBelt', ->
     it 'should process invalid coffeescript files and return error in results', (done) ->
       testFilepath = 'tests/data/invalid.coffee'
       belt = new ClosureBelt()
-      belt.use readFileStream()
-      belt.use createASTStream()
+      belt.use readFileStream
+      belt.use createASTStream
       belt.process testFilepath, (results) ->
         expect(results[path.resolve __dirname, 'data/invalid.coffee']).to.be.error
         done()
@@ -44,8 +44,8 @@ describe 'ClosureBelt', ->
     it 'should process invalid and valid coffeescript files and return error in results', (done) ->
       testFilepath = ['tests/data/invalid.coffee', 'tests/data/valid.coffee']
       belt = new ClosureBelt()
-      belt.use readFileStream()
-      belt.use createASTStream()
+      belt.use readFileStream
+      belt.use createASTStream
       belt.process testFilepath, (results) ->
         expect(results[path.resolve __dirname, 'data/invalid.coffee']).to.be.error
         expect(results[path.resolve __dirname, 'data/valid.coffee']).to.be.yes
@@ -55,8 +55,8 @@ describe 'ClosureBelt', ->
       testFilepath = ['tests/data/valid.coffee']
       belt = new ClosureBelt
         resolveFileStatus: (chunk) -> chunk.ast
-      belt.use readFileStream()
-      belt.use createASTStream()
+      belt.use readFileStream
+      belt.use createASTStream
       belt.process testFilepath, (results) ->
         expect(results[path.resolve __dirname, 'data/valid.coffee']).to.be.object
         done()
@@ -65,9 +65,9 @@ describe 'ClosureBelt', ->
       testFilepath = ['tests/data/valid.coffee']
       belt = new ClosureBelt
         resolveFileStatus: (chunk) -> chunk.dependencies
-      belt.use readFileStream()
-      belt.use createASTStream()
-      belt.use closureDependenciesStream()
+      belt.use readFileStream
+      belt.use createASTStream
+      belt.use closureDependenciesStream
       belt.process testFilepath, (results) ->
         expect(results[path.resolve __dirname, 'data/valid.coffee']).to.eql
           'uses':
@@ -104,10 +104,10 @@ describe 'ClosureBelt', ->
         resolveFileStatus: (chunk) ->
           dep: chunk.dependencies
           un: chunk.unnecessary_requires
-      belt.use readFileStream()
-      belt.use createASTStream()
-      belt.use closureDependenciesStream()
-      belt.use unnecessaryRequiresStream()
+      belt.use readFileStream
+      belt.use createASTStream
+      belt.use closureDependenciesStream
+      belt.use unnecessaryRequiresStream
       belt.process testFilepath, (results) ->
         expect(results[path.resolve __dirname, 'data/unnecessary_requires.coffee']).to.eql
           dep:

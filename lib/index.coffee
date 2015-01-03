@@ -4,13 +4,13 @@ _ = require 'lodash-node'
 
 class ClosureBelt
   constructor: (options) ->
-    @_options = _.defaults options || {},
+    @_options = _.defaults options or {},
       log: no
       resolveFileStatus: (chunk) -> yes
     @_transforms = []
 
-  use: (transform) ->
-    @_transforms.push transform
+  use: (transform, options) ->
+    @_transforms.push {transform, options}
     @
 
   process: (paths, done) ->
@@ -40,8 +40,9 @@ class ClosureBelt
 
   _transform: (errorHandler) ->
     through2.obj (chunk, enc, cb) =>
-      for transform, i in @_transforms
-        chunk.stream = chunk.stream.pipe transform chunk.path
+      for {transform, options}, i in @_transforms
+        options = _.defaults path: chunk.path, _.defaults options or {}, @_options
+        chunk.stream = chunk.stream.pipe transform options
         chunk.stream.on 'error', errorHandler "transformation ##{i + 1}", chunk.path
       cb null, chunk
 
