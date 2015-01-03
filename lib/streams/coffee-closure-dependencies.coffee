@@ -52,6 +52,9 @@ module.exports = (options) ->
       provides: {}
       requires: {}
       uses: {}
-    chunk.ast.traverseChildren yes, parseNode options, results
+    try
+      chunk.ast.traverseChildren yes, parseNode options, results
+    catch err
+      return cb err
     chunk.dependencies = results
     cb null, chunk
