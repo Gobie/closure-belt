@@ -19,7 +19,7 @@ describe 'ClosureBelt', ->
         expect(results).to.eql {}
         done()
 
-    it 'should process valid coffeescript file without change', (done) ->
+    it 'should process valid coffeescript file and save without change', (done) ->
       testFilepath = 'tests/data/valid.coffee'
       testFileContent = fs.readFileSync(testFilepath).toString()
       belt = new ClosureBelt()
